@@ -1,0 +1,8 @@
+<div #mainContainer [ngClass]="{'is-dragging': favs.isDragging}" class="favorite-container">
+  <div class="favorite-container-dropzone" (dragenter)="ondragenter($event)" (dragleave)="ondragleave($event)" (drop)="ondrop($event)" (dragover)="allowDrop($event)">
+
+  </div>
+  <div id="favorite-container-{{item}}" class="favorite-container-inner" *ngIf="result" draggable="true" (dragend)="ondragend($event)" (dragstart)="ondragstart($event)">
+    <app-results-item [item]="result"></app-results-item>
+  </div>
+</div>

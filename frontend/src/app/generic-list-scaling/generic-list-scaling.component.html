@@ -1,0 +1,9 @@
+<div class="scaling-container row">
+    <div class="col-10">
+        <input type="range" min="1" max="12" [(ngModel)]="bootstrapScale" (change)="sendNewScale()"/>
+    </div>
+    <div class="col-2">
+        <a class="btn btn-outline-secondary" (click)="bootstrapScale = -1; sendNewScale()">Reset</a>
+    </div>
+ 
+</div>

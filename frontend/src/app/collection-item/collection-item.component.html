@@ -1,0 +1,11 @@
+<div class="card">
+  <img class="card-img-top" [src]="api.baseURL+'/img/'+item.id+'/thumb/'+item.preview?.split('.')[0]+'.jpg?token='+api.token" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{item.name}} <small><span *ngIf="item.status == 9" class="oi oi-trash"></span></small></h5>
+    <p class="card-text">&middot; {{item.creator}}, {{item.created | date:'short'}}<br>
+      &middot; {{item.total_images}} images
+    </p>
+    <!--<p class="card-text">{{item.comment}}</p>-->
+    <a routerLink="/collection/{{item.id}}/images" class="btn btn-primary">Show collection</a><a style="margin-left: 10px;" *ngIf="item.editable" routerLink="/collection/{{item.id}}/info" class="btn btn-outline-primary">Edit</a>
+  </div>
+</div>

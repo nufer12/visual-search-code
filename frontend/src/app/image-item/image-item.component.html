@@ -1,0 +1,5 @@
+<div class="img-container">
+    <a [routerLink]="'/collection/'+collectionID+'/image/'+item.id">
+      <img [src]="api.baseURL+'/img/'+collectionID+'/thumb/'+item.filename.split('.')[0]+'.jpg?token='+api.token"/>
+    </a>
+</div>

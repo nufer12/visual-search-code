@@ -1,0 +1,38 @@
+<div #indexModal class="modal fade" id="index-modal" tabindex="-1" role="dialog" aria-labelledby="index-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="index-modal-label">New Filter</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="newIndexName">Title</label>
+            <input type="text" id="newIndexName" [(ngModel)]="indexName" name="new-index-name" class="form-control" placeholder="Filter name"/>
+          </div>
+          <div class="form-group">
+            <label for="newIndexType">Type</label>
+            <select id="newIndexType" name="new-index-type" class="form-control" [(ngModel)]="indexType">
+              <option *ngFor="let type of indexTypes" value="{{type.id}}">{{type.name}}</option>
+            </select>
+          </div>
+          <p>{{indexDescription}}</p>
+          <div class="form-group">
+            <label for="newIndexMachine">Worker</label>
+            <select id="newIndexMachine" name="new-index-machine" class="form-control" [(ngModel)]="indexMachine">
+              <option value="-1">Automatically</option>
+              <option *ngFor="let worker of workers" value="{{worker.id}}">{{worker.description}} ({{worker.id}})</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary disabled-on-loading" (click)="createIndex()">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

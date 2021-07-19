@@ -1,0 +1,19 @@
+<div class="card">
+  <div class="card-img-top">
+    <app-image-boxes *ngIf="itemAsSearchResult" [imageID]="itemAsSearchResult?.image_id" [collectionID]="collectionID" [filename]="itemAsSearchResult?.filename" [result]="itemAsSearchResult"></app-image-boxes>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{item.name}}</h5>
+    <h6 *ngIf="item.status == IndexStatus.PENDING">Pending</h6>
+    <h6 *ngIf="item.status == IndexStatus.RUNNING">Running</h6>
+    <h6 *ngIf="item.status == IndexStatus.STOPPED_WITH_ERRORS">Errors occured</h6>
+    <h6 *ngIf="item.status == IndexStatus.STOPPED_ON_REQUEST">Cancelled</h6>
+    <p class="card-text">
+      &middot; {{indexName}} ({{item.index_id}})<br>
+      &middot; {{item.total_hits}} results<br>
+      <!--<span *ngIf="item.base_search">&middot; Refinement of <a routerLink="/collection/{{collectionID}}/search/{{item.base_search}}">Search {{item.base_search}}</a><br/></span>-->
+      <span *ngIf="lastRefinementID">&middot; Refined by <a routerLink="/collection/{{collectionID}}/search/{{lastRefinementID}}">Search {{lastRefinementID}}</a><br/></span>
+    </p>
+    <a routerLink="/collection/{{collectionID}}/search/{{item.id}}" class="btn btn-primary" [ngClass]="{'disabled': item.status != IndexStatus.FINISHED}">Show results</a>
+  </div>
+</div>

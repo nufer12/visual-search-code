@@ -1,0 +1,22 @@
+// .filter-container {
+
+//     margin-bottom: 20px;
+
+//     div {
+//         display: inline-block;
+//         margin-right: 20px;
+
+//         &:last-child {
+//             margin-right: 0;
+//         }
+//     }
+// }
+
+.filter-container {
+    display: inline-flex;
+
+    & > div {
+        flex: 1 1 auto;
+        margin-right: 10px;
+    }
+}

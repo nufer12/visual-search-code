@@ -1,0 +1,7 @@
+<nav *ngIf="paginationList.length > 1">
+    <ul class="pagination">
+      <li class="page-item"><a [routerLink]="[]" [queryParams]="getQueryParam(0)" class="page-link">First</a></li>
+      <li *ngFor="let l of paginationList" class="page-item"><a [routerLink]="[]" [queryParams]="getQueryParam(l)" class="page-link">{{l + 1}}</a></li>
+      <li class="page-item"><a [routerLink]="[]" class="page-link" [queryParams]="getQueryParam(lastPage)">Last</a></li>
+    </ul>
+  </nav>

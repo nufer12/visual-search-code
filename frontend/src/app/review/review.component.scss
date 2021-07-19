@@ -1,0 +1,44 @@
+.voted-up {
+    animation: bkgUpvote 1s;
+  }
+  .voted-down {
+    animation: bkgDownvote 1s;
+  }
+  
+  
+  @keyframes bkgUpvote {
+    0% {
+      background-color: white;
+    }
+    20% {
+      background-color: #2ecc71;
+    }
+    80% {
+      background-color: #2ecc71;
+    }
+  
+    100% {
+      background-color: white;
+    }
+  }
+  
+  @keyframes bkgDownvote {
+    0% {
+      background-color: white;
+    }
+    20% {
+      background-color: #C0392B;
+    }
+    80% {
+      background-color: #C0392B;
+    }
+  
+    100% {
+      background-color: white;
+    }
+  }
+
+.progress {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}

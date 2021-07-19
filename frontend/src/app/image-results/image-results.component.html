@@ -1,0 +1,10 @@
+<div #outerContainer [id]="'pic-result-'+imageID" class="pic-result-container">
+    <div class="pic-result-wrapper-outer" [ngStyle]="wrapper_outer_style">
+      <div class="pic-result-wrapper-inner" [ngStyle]="wrapper_inner_style">
+        <img #imageTag [src]="src" class="pic-result-image"/>
+        <div class="pic-result-marker-container">
+          <div *ngFor="let areaData of allResultAreas" class="pic-result-marker result-id-{{areaData.id}}" [ngStyle]="getBboxStyle(areaData.area)"></div>
+        </div>
+      </div>
+    </div>
+  </div>

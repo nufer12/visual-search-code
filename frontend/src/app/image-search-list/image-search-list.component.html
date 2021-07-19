@@ -1,0 +1,19 @@
+<h2>Searches of <a routerLink="/collection/{{collectionID}}/image/{{imageID}}">image {{imageID}}</a></h2>
+<div class="left-label-container">
+    <div class="left-label-description">
+        Filter:
+    </div>
+    <div class="left-label-component">
+        <app-generic-list-filter [scheme]="filterScheme" ></app-generic-list-filter>
+    </div>
+</div>
+<div class="left-label-container">
+    <div class="left-label-description">
+        Scaling:
+    </div>
+    <div class="left-label-component">
+        <app-generic-list-scaling [bootstrapScale]="bootstrapScale" (rescaled)="bootstrapScale = $event"></app-generic-list-scaling>
+    </div>
+</div>
+<app-generic-list [bootstrapScale]="bootstrapScale" [getParamsKey]="'page_searches'" [itemType]="'search'" [apiArrayKey]="'imageSearches'" [apiID]="imageID" [itemClass]="'col-md-3'" (newData)="paginationSettingsSearches = $event" [perPage]="20"></app-generic-list>
+<app-generic-list-pagination [getParamsKey]="'page_searches'" [total]="paginationSettingsSearches[0]" [perPage]="paginationSettingsSearches[1]"></app-generic-list-pagination>

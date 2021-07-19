@@ -1,0 +1,37 @@
+.notification-container {
+    width: 80vw;
+    position: absolute;
+    left: 10vw;
+    bottom: 30px;
+    z-index: 3000;
+  
+    .notification {
+      display: inline-block;
+      max-width: 250px;
+      margin-bottom: 10px;
+      animation-name: comingNotification;
+      animation-duration: 5.6s;
+      animation-fill-mode: both;
+      margin-right: 10px;
+    }
+  }
+  
+  @keyframes comingNotification {
+    0% {
+      opacity: 0;
+      width: 0;
+    }
+    5% {
+      opacity: 1;
+      width: 250px;
+    }
+    95% {
+      opacity: 1;
+      width: 250px;
+    }
+    100% {
+      opacity: 0;
+      width: 0;
+    } 
+  }
+  

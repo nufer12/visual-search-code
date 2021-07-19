@@ -1,0 +1,11 @@
+<app-image-boxes #imageCanvas [imageID]="item?.image_id" [collectionID]="collectionID" [filename]="item?.filename" [result]="item" (refinedChanged)="changeRefinement($event)" (clicked)="router.navigate(['/collection/'+collectionID+'/image/'+item.image_id])"></app-image-boxes>
+<!--<a class="btn btn-outline-secondary btn-sm" routerLink="/collection/{{collectionID}}/image/{{item.image_id}}"><span class="oi oi-eye"></span></a>-->
+<button class="btn btn-sm btn-outline-secondary" (click)="imageCanvas.focusOnResults()"><span class="oi oi-plus"></span></button>
+<button class="btn btn-sm btn-outline-secondary" (click)="focusRefinement()"><span class="oi oi-move"></span></button>
+<button class="btn btn-sm" [ngClass]="{'btn-outline-secondary': item.vote <= 0,'btn-active': item.vote > 0}" (click)="toggleVote(1)"><span class="oi oi-check"></span></button>
+<button class="btn btn-sm" [ngClass]="{'btn-outline-secondary': item.vote >= 0, 'btn-active': item.vote < 0}" (click)="toggleVote(-1)"><span class="oi oi-x" ></span></button>
+<button class="btn btn-sm" [ngClass]="{'btn-outline-secondary': !isFavorite, 'btn-active': isFavorite}" (click)="toggleFavorite()"><span class="oi oi-star" ></span></button>
+<button class="btn btn-sm btn-outline-secondary" (click)="imageCanvas.saveImage()"><span class="oi oi-cloud-download" ></span></button><br/>
+<div class="progress" style="margin-bottom: 20px; margin-top: 5px;">
+    <div class="progress-bar" [style.width]="currentPercentageStyle" role="progressbar" style="background-color: #b9b9b9" attr.aria-valuenow="{{relativeScore}}" aria-valuemin="0" aria-valuemax="100">{{relativeScore | number:'.1-1'}}</div>
+</div><!--[style.backgroundColor]="currentPercentageColor" -->

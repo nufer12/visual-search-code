@@ -1,0 +1,28 @@
+<div class="nav main-nav">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2">
+                <button (click)="api.clearCache()" class="btn"><span class="oi oi-loop-circular"></span></button>
+                <button (click)="api.logout()" class="btn"><span class="oi oi-power-standby"></span></button>
+            </div>
+            <div class="col-sm-5 offset-sm-5">
+                <div class="row no-gutters">
+                <div class="col-4">
+                    <a routerLink="/collections" routerLinkActive="active"><span class="oi oi-list-rich"></span> Collections</a>
+                </div>
+                <div *ngIf="api.user?.resource_priv > 0" class="col-4">
+                    <a routerLink="/resources" routerLinkActive="active"><span class="oi oi-monitor"></span> Resources</a>
+                </div>
+                <div *ngIf="api.user?.user_priv > 0" class="col-4">
+                    <a routerLink="/users" routerLinkActive="active"><span class="oi oi-person"></span> User</a>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>
+<app-login></app-login>
+<div style="position: fixed; bottom: 0; left: 0">
+    <app-notification></app-notification>
+</div>

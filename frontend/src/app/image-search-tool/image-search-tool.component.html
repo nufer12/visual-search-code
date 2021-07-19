@@ -1,0 +1,10 @@
+<div #outerContainer [id]="'pic-search-'+imageID" class="pic-search-container">
+    <div class="pic-search-wrapper-outer" [ngStyle]="{'padding-bottom': padding}">
+      <div class="pic-search-wrapper-inner">
+        <img #imageTag (mousedown)="initNewDrawing($event)" (mouseup)="finishNewDrawing($event)" draggable="false" [src]="src" class="pic-search-image"/>
+        <div #currSearchBoxDiv (click)="initNewDrawing($event)" style="position: absolute; border-color: green; border-style: solid; border-width: 3px" [ngStyle]="getEditBboxStyle()"></div>
+        <div *ngFor="let searchbox of searchBBoxes; let i = index" (click) = "searchBoxActive = i" class="pic-search-searchbox" [ngClass]="{'active': i == searchBoxActive}" [ngStyle]="getBboxStyle(searchbox)"></div>
+      </div>
+    </div>
+  </div>
+  

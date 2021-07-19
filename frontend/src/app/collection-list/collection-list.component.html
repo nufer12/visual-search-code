@@ -1,0 +1,15 @@
+<div class="container main-container">
+  <h1 class="page-title">Collections</h1>
+  <button *ngIf="api.user?.coll_priv == 1 || api.user?.coll_priv >= 3" type="button" style="margin-bottom: 10px;" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#collection-create-modal">New Collection</button>
+  <div class="left-label-container">
+    <div class="left-label-description">
+        Scaling:
+    </div>
+    <div class="left-label-component">
+      <app-generic-list-scaling [bootstrapScale]="bootstrapScale" (rescaled)="bootstrapScale = $event"></app-generic-list-scaling>
+    </div>
+  </div>
+  <app-generic-list [itemType]="'collection'" [apiArrayKey]="'collections'" [apiID]="0" [bootstrapScale]="bootstrapScale" [itemClass]="'col-md-6 col-lg-4'" (newData)="paginationSettings = $event"></app-generic-list>
+  <app-generic-list-pagination [total]="paginationSettings[0]" [perPage]="paginationSettings[1]"></app-generic-list-pagination>
+</div>
+<app-new-collection></app-new-collection>

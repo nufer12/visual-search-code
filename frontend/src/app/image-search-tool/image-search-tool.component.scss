@@ -1,0 +1,56 @@
+.pic-search-container {
+    position: relative;
+    // max-width: 40vw;
+  
+    .pic-search-wrapper-outer {
+      position: relative;
+      overflow: hidden;
+      display: block;
+      width: 100%;
+  
+      .pic-search-wrapper-inner {
+        position: absolute;
+        width: 100%;
+        left: 0%;
+        top: 0%;
+  
+        .pic-search-image {
+          width: 100%;
+          height: auto;
+          display: block;
+          left: 0;
+          top: 0;
+          position: relative;
+
+          // user-drag: none; 
+          user-select: none;
+          -moz-user-select: none;
+          -webkit-user-drag: none;
+          -webkit-user-select: none;
+          -ms-user-select: none;
+        }
+  
+      }
+  
+    }
+  }
+  
+  .pic-search-container {
+    cursor: crosshair;
+    .pic-search-searchbox {
+      border-style: solid;
+      border-color: red;
+      border-width: 3px;
+      cursor: pointer;
+      position: absolute;
+      &.active {
+        border-width: 5px;
+      }
+    }
+    &.on-creation {
+      .pic-search-searchbox {
+        display: none;
+      }
+    }
+  }
+  

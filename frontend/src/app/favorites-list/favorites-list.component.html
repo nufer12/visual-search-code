@@ -1,0 +1,30 @@
+<h2>Favorites for search: <a routerLink="/collection/{{collectionID}}/search/{{searchID}}">{{searchData?.name}} ({{searchID}})</a></h2>
+<div class="left-label-container">
+    <div class="left-label-description">
+        Scaling:
+    </div>
+    <div class="left-label-component">
+        <app-generic-list-scaling [bootstrapScale]="bootstrapScale" (rescaled)="bootstrapScale = $event"></app-generic-list-scaling>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <h3>Query</h3>
+        <app-image-boxes *ngIf="queryAsResult" [imageID]="queryAsResult?.image_id" [collectionID]="collectionID" [filename]="queryAsResult?.filename" [result]="queryAsResult" (clicked)="router.navigate(['/collection/'+collectionID+'/image/'+searchData.image_id])"></app-image-boxes>
+        <!--<a class="btn btn-outline-secondary btn-sm" routerLink="/collection/{{collectionID}}/image/{{searchData?.image_id}}"><span class="oi oi-eye" ></span></a>-->
+        <button class="btn btn-sm btn-outline-secondary" (click)="magnifyAll()"><span class="oi oi-plus"></span></button>
+        <ul>
+                <li>No. of results: {{searchData?.total_hits}}</li>
+                <li>Link of multiple: {{searchData?.searchParams?.combination}}</li>
+                <li>Positives: {{searchData?.searchParams?.pos}}, Negatives: {{searchData?.searchParams?.neg}}</li>
+                <li>Date and Time of Search: {{searchData?.creation_date | date:'short'}}</li>
+                <li>Submitted by: {{searchData?.creator}}</li>
+                <li>Search ID: {{searchID}}</li>
+                <li>Visual Filter ID: {{searchData?.index_id}}</li>
+        </ul>
+    </div>
+    <div class="col-9">
+        <app-generic-list [itemType]="'favorite'" [bootstrapScale]="bootstrapScale" [apiArrayKey]="'searchFavorites'" [apiID]="searchID" [itemClass]="'col-md-4 col-lg-3'" (newData)="paginationSettings = $event"></app-generic-list>
+        <app-generic-list-pagination [total]="paginationSettings[0]" [perPage]="paginationSettings[1]"></app-generic-list-pagination>
+    </div>
+</div>

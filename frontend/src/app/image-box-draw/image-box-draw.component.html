@@ -1,0 +1,8 @@
+<div class="image-outer-container" (window:resize)="draw()">
+  <div class="image-inner-container">
+    <img #imgTag [src]="src"/>
+    <div class="canvas-container">
+      <canvas id="draw-canvas"></canvas>
+    </div>
+  </div>
+</div>

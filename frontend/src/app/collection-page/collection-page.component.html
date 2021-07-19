@@ -1,0 +1,37 @@
+<div *ngIf="collectionID != null" class="container main-container">
+    <h1>Collection: {{collectionData?.name}} <small><span *ngIf="collectionData?.status == 9" class="oi oi-trash"></span></small></h1>
+    <ul class="nav nav-tabs" id="collection-tab-nav" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': activeTab == 1}" routerLink="/collection/{{collectionID}}/info" role="tab">
+                Information
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': activeTab == 2}" routerLink="/collection/{{collectionID}}/images" role="tab">
+                Images
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': activeTab == 3}" routerLink="/collection/{{collectionID}}/indices" role="tab">
+                Filters
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': activeTab == 4}" routerLink="/collection/{{collectionID}}/searches" role="tab">
+                Searches
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': activeTab == 5}" routerLink="/collection/{{collectionID}}/upload" role="tab">
+                Upload
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': activeTab == 6}" routerLink="/collection/{{collectionID}}/review" role="tab">
+                Review
+            </a>
+        </li>
+    </ul>
+    <router-outlet></router-outlet>
+</div>
+  

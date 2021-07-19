@@ -1,0 +1,7 @@
+<div class="container main-container">
+    <h1>Users</h1>
+    <button *ngIf="api.user?.coll_priv == 1 || api.user?.coll_priv >= 3" type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#user-create-modal">New User</button>
+    <app-generic-list [itemType]="'user'" [apiArrayKey]="'users'" [itemClass]="'col-md-3 col-lg-2'" (newData)="paginationSettings = $event"></app-generic-list>
+    <app-generic-list-pagination [total]="paginationSettings[0]" [perPage]="paginationSettings[1]"></app-generic-list-pagination>
+</div>
+<app-new-user></app-new-user>

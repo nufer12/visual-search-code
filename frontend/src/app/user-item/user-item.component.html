@@ -1,0 +1,6 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">{{item.name}}</h5>
+    <button routerLink="/user/{{item.id}}" class="btn btn-primary" [disabled]="api.user?.user_priv < 1 && api.user?.id != item.id">Show</button>
+  </div>
+</div>

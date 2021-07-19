@@ -1,0 +1,28 @@
+.favorite-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    .favorite-container-dropzone {
+        flex: 0 0 0;
+        transition: all 0.3s;
+        background-color: green;
+        opacity: 0.3
+    }
+
+    .favorite-container-inner {
+        flex: 1 1 auto;
+        transition: all 0.3s;
+    }
+}
+
+.is-dragging .favorite-container-dropzone {
+    flex: 0 0 30px;
+
+    &.drag-is-over {
+        opacity: 1;
+        flex: 0 0 60px;
+    }
+}
+

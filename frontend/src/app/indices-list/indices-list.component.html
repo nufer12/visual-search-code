@@ -1,0 +1,41 @@
+<h2>Filter for visual search</h2>
+<button *ngIf="collectionData?.editable" type="button" style="margin-bottom: 10px;" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#index-modal">Create Filter</button>
+<p *ngIf="indexList?.length == 0">There are no filters in the collection.</p>
+<table *ngIf="indexList?.length > 0" class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Type</th>
+      <th scope="col">Creator</th>
+      <th scope="col">Creation Date</th>
+      <th scope="col">Status</th>
+      <th scope="col">More information</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let index of indexList">
+      <th scope="row">{{index.id}}</th>
+      <th><input #indexName type="text" value="{{index.name}}" (change)="changeIndexName(indexName.value, index.id)"/></th>
+      <th>{{index.typename}}</th>
+      <th>{{index.creator}}</th>
+      <th>{{index.creation_date | date:'short'}}</th>
+      <th>
+        <span *ngIf="index.status == IndexStatus.CANCEL_REQUESTED">Cancellation requested</span>
+        <span *ngIf="index.status == IndexStatus.PENDING">Pending</span>
+        <span *ngIf="index.status == IndexStatus.DELIVERED">Sent to worker</span>
+        <span *ngIf="index.status == IndexStatus.RUNNING">Running</span>
+        <span *ngIf="index.status == IndexStatus.STOPPED_WITH_ERRORS">Stopped with errors</span>
+        <span *ngIf="index.status == IndexStatus.STOPPED_ON_REQUEST">Cancelled</span>
+        <span *ngIf="index.status == IndexStatus.FINISHED">Ready</span>
+        <span *ngIf="index.status == IndexStatus.DELTED">Deleted</span>
+        <div *ngIf="!index.is_latest">
+          Images were added or removed. <button type="button" class="btn btn-outline-primary btn-sm btn-inline" (click)="rerun(index.id)">Rerun</button>
+        </div>
+      </th>
+      <th><button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#indexMoreInfoModal" (click)="indexInfoModal.indexID = index.id"><span class="oi oi-info"></span></button></th>
+    </tr>
+  </tbody>
+</table>
+<app-index-info-modal #indexInfoModal></app-index-info-modal>
+<app-new-index></app-new-index>

@@ -1,0 +1,19 @@
+<h2>Searches</h2>
+<div class="left-label-container">
+    <div class="left-label-description">
+        Filter:
+    </div>
+    <div class="left-label-component">
+        <app-generic-list-filter [scheme]="filterScheme" ></app-generic-list-filter>
+    </div>
+</div>
+<div class="left-label-container">
+    <div class="left-label-description">
+        Scaling:
+    </div>
+    <div class="left-label-component">
+        <app-generic-list-scaling [bootstrapScale]="bootstrapScale" (rescaled)="bootstrapScale = $event"></app-generic-list-scaling>
+    </div>
+</div>
+<app-generic-list [itemType]="'search'" [bootstrapScale]="bootstrapScale" [apiArrayKey]="'searches'" [apiID]="collectionID" [itemClass]="'col-md-3 col-lg-2'" (newData)="paginationSettings = $event"></app-generic-list>
+<app-generic-list-pagination [total]="paginationSettings[0]" [perPage]="paginationSettings[1]"></app-generic-list-pagination>

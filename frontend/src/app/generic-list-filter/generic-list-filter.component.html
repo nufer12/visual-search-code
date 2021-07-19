@@ -1,0 +1,5 @@
+<div class="filter-container">
+    <div *ngFor="let filterInput of scheme">
+        <input type="{{filterInput.type}}" name="{{filterInput.name}}" placeholder="{{filterInput.placeholder}}" [(ngModel)]="filter[filterInput.name]" (change)="update()" [attr.min]="filterInput.min ? filterInput.min : null"  [attr.max]="filterInput.max ? filterInput.max : null"  [attr.step]="filterInput.step ? filterInput.step : null"/>
+    </div>
+</div>

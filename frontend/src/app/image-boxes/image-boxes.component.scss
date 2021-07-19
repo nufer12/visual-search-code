@@ -1,0 +1,16 @@
+.pic-result-wrapper {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+.canvas-container {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+img {
+    width: 100%;
+    display: block;
+    opacity: 0;
+}

@@ -1,0 +1,90 @@
+<div class="container">
+  <h2>Search: <input type="text" placeholder="Search tag" [value]="searchData?.name" (change)="updateSearchName($event)"/></h2>
+  <div class="row">
+    <div class="col-3">
+      <button class="btn btn-outline-primary btn-sm" (click)="refineSearch()" type="button">
+          Refine Search Results <span class="oi oi-check" ></span><span style="width: 5px; display: inline-block;"></span><span class="oi oi-x" ></span>
+      </button>
+    </div>
+    <div class="col-3">
+        <div class="dropdown">
+          <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="dropdownRerun" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Search with other filters...
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownRerun">
+            <!-- TODO: display warning if both not is_latest -->
+            <button *ngFor="let index of indexData" class="dropdown-item" (click)="startWithOtherIndex(index.id)" [disabled]="index.status != IndexStatus.FINISHED">{{index.name}}
+                <span *ngIf="index.status <= IndexStatus.RUNNING"> (Not ready)</span>
+                <span *ngIf="index.status >= IndexStatus.STOPPED_WITH_ERRORS && index.status <= IndexStatus.STOPPED_ON_REQUEST"> (Stopped)</span>
+                <span *ngIf="index.status == IndexStatus.DELETED"> (Deleted)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    <div class="col-3">
+      <div style="width:100%;" class="btn-group">
+          <a *ngIf="baseSearch" routerLink="/collection/{{collectionID}}/search/{{baseSearch?.id}}" class="col-6 btn btn-outline-primary btn-sm"><span class="oi oi-arrow-thick-left"></span> Previous</a>
+          <a *ngIf="refinedSearches && refinedSearches.length > 0" routerLink="/collection/{{collectionID}}/search/{{refinedSearches[refinedSearches.length - 1].id}}" class="col-6 btn btn-outline-primary btn-sm" type="button">Next <span class="oi oi-arrow-thick-right"></span></a>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="dropdown">
+        <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="dropdownThisSearch" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Jump to search...
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownThisSearch">
+          <h6 class="dropdown-header">Refinements</h6>
+          <a *ngFor="let search of refinedSearches" class="dropdown-item" routerLink="/collection/{{collectionID}}/search/{{search.id}}">{{search.name}} ({{search.id}}, {{search.creation_date | date:'short'}})</a>
+          <h6 class="dropdown-header">With other visual filter</h6>
+          <a *ngFor="let search of relatedSearches" class="dropdown-item" routerLink="/collection/{{collectionID}}/search/{{search.id}}">{{search.name}} ({{search.id}}, {{search.creation_date | date:'short'}})</a>
+          <h6 class="dropdown-header">Same Parent</h6>
+          <a *ngFor="let search of siblingSearches" class="dropdown-item" routerLink="/collection/{{collectionID}}/search/{{search.id}}">{{search.name}} ({{search.id}}, {{search.creation_date | date:'short'}})</a>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  
+  <div class="left-label-container" style="margin-top: 30px; margin-bottom: 30px;">
+    <div class="left-label-description">
+        Scaling:
+    </div>
+    <div class="left-label-component">
+        <app-generic-list-scaling [bootstrapScale]="bootstrapScale" (rescaled)="bootstrapScale = $event"></app-generic-list-scaling>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-3">
+      <h3>Search Details</h3>
+      <app-image-boxes *ngIf="queryAsResult" [imageID]="queryAsResult?.image_id" [collectionID]="collectionID" [filename]="queryAsResult?.filename" [result]="queryAsResult"  (clicked)="router.navigate(['/collection/'+collectionID+'/image/'+searchData.image_id])"></app-image-boxes>
+      <!--<a class="btn btn-outline-secondary btn-sm" routerLink="/collection/{{collectionID}}/image/{{searchData?.image_id}}"><span class="oi oi-eye" ></span></a>-->
+      <a class="btn btn-outline-secondary btn-sm" routerLink="/collection/{{collectionID}}/search/{{searchID}}/favorites"><span class="oi oi-star" ></span></a>
+      <button class="btn btn-sm btn-outline-secondary" (click)="magnifyAll()"><span class="oi oi-plus"></span></button>
+      <a class="btn btn-outline-secondary btn-sm" routerLink="/collection/{{collectionID}}/search/{{searchID}}/tsne"><span class="oi oi-layers"></span></a>
+      <ul>
+        <li>No. of results: {{searchData?.total_hits}}</li>
+        <li>Link of multiple: {{searchData?.searchParams?.combination}}</li>
+        <li>Positives: {{searchData?.searchParams?.pos}}, Negatives: {{searchData?.searchParams?.neg}}</li>
+        <li>Date and Time of Search: {{searchData?.creation_date | date:'short'}}</li>
+        <li>Submitted by: {{searchData?.creator}}</li>
+        <li>Search ID: {{searchID}}</li>
+        <li>Visual Filter ID: {{searchData?.index_id}}</li>
+      </ul>
+    </div>
+    <div class="col-9">
+      <h3>&nbsp;</h3>
+      <div *ngIf="searchData?.status == 5">
+          <app-generic-list [itemType]="'result'" [bootstrapScale]="bootstrapScale" [apiArrayKey]="'searchResults'" [apiID]="searchID" [itemClass]="'col-md-6 col-lg-4'" (newData)="paginationSettings = $event"></app-generic-list>
+          <app-generic-list-pagination [total]="paginationSettings[0]" [perPage]="paginationSettings[1]"></app-generic-list-pagination>
+      </div>
+      <div *ngIf="searchData?.status <= 5">
+        <p *ngIf="searchData?.status == IndexStatus.PENDING">The search was not processed yet.</p>
+        <p *ngIf="searchData?.status == IndexStatus.RUNNING">The search is currently running.</p>
+        <p *ngIf="searchData?.status == IndexStatus.STOPPED_ON_REQUEST">The search was aborted by an user.</p>
+        <p *ngIf="searchData?.status == IndexStatus.STOPPED_WITH_ERRORS">During search errors occured.</p>
+      </div>
+    </div>
+  </div>
+</div>

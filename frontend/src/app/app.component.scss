@@ -1,0 +1,36 @@
+$dark-blue: #343a40;
+$dark-blue-lighter: #4a535b;
+$dark-blue-highlight: #6c7885;
+
+.main-nav {
+  background-color: $dark-blue;
+  min-height: 3em;
+  margin-bottom: 1em;
+
+  a {
+    height: 100%;
+    width: 100%;
+    display: block;
+    background-color: $dark-blue-lighter;
+    color: white;
+    line-height: 3em;
+    text-align: center;
+    transition: background-color 0.5s;
+  }
+
+  button {
+    height: 3em;
+    width: 3em;
+    display: inline-block;
+    background-color: $dark-blue-lighter;
+    color: white;
+    transition: background-color 0.5s;
+    border-radius: 0;
+  }
+
+  a.active, a:hover, button.active, button:hover {
+    background-color: $dark-blue-highlight;
+    text-decoration: none;
+  }
+
+}

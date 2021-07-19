@@ -1,0 +1,78 @@
+<div #mainContainer class="container main-container">
+  <h2>Review</h2>
+  <div #selectionContainer id="selection-accordion">
+    <div class="card">
+      <div class="card-header" id="selection-index-heading">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#selection-index" aria-expanded="true" aria-controls="selection-index">
+            Filters
+          </button>
+        </h5>
+      </div>
+      <div id="selection-index" class="collapse" aria-labelledby="selection-index-heading" data-parent="#selection-accordion">
+        <div class="card-body">
+          <form>
+            <div *ngFor="let index of indices" class="form-check form-check-inline">
+              <input id="check-index-{{index.id}}" type="checkbox" [value]="index.id" name="selection-index" class="form-check-input" (change)="refreshParams()" [checked]="indexIDs.indexOf(''+index.id) > -1"/>
+              <label for="check-index-{{index.id}}">
+                {{index.name}}
+              </label>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="card">
+      <div class="card-header" id="selection-search-heading">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#selection-search" aria-expanded="false" aria-controls="selection-search">
+            Searches
+          </button>
+        </h5>
+      </div>
+      <div id="selection-search" class="collapse" aria-labelledby="selection-search-heading" data-parent="#selection-accordion">
+        <div class="card-body">
+          <app-generic-list-filter [scheme]="filterScheme" ></app-generic-list-filter>
+          <app-generic-list [itemType]="'search-small'" [apiArrayKey]="'searches'" [apiID]="collectionID" [itemClass]="'col-md-3 col-lg-2'" (newData)="paginationSettings = $event"></app-generic-list>
+          <app-generic-list-pagination [total]="paginationSettings[0]" [perPage]="paginationSettings[1]"></app-generic-list-pagination> 
+        </div>
+      </div>
+    </div>-->
+
+    <div class="card">
+      <div class="card-header" id="selection-max-heading">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#selection-max" aria-expanded="false" aria-controls="selection-max">
+            Number of Search Results
+          </button>
+        </h5>
+      </div>
+      <div id="selection-max" class="collapse" aria-labelledby="selection-max-heading" data-parent="#selection-accordion">
+        <div class="card-body">
+          <div class="form-group">
+            <input type="range" class="form-control" name="selection-max" [(ngModel)]="maxRetrievals" min="1" max="50" step="1" (change)="refreshParams()"/>{{maxRetrievals}} Retrievals
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p *ngIf="retrievalPairs != null && retrievalPairs.length == 0 && activeQuery == null">There are no unreviewed retrievals.</p>
+  <div *ngIf="activeSearchResult != null" class="row">
+    <div class="col-12">
+      <div class="progress">
+        <div class="progress-bar" [style.width]="currentPercentageStyle" role="progressbar" attr.aria-valuenow="{{currentPercentage}}" aria-valuemin="0" aria-valuemax="100">{{startedWithPairs - (retrievalPairs.length + 1)}}/{{startedWithPairs}}</div>
+      </div>
+    </div>
+    <div class = "col-md-6">
+      <h4>Query</h4>
+      <app-image-boxes *ngIf="activeQuery" [imageID]="activeQuery?.image_id" [collectionID]="collectionID" [filename]="activeQuery?.filename" [result]="activeQuery"  (clicked)="router.navigate(['/collection/'+collectionID+'/image/'+activeQuery?.image_id])"></app-image-boxes>
+    </div>
+    <div class = "col-md-6">
+      <h4>Search Result</h4>
+      <app-image-boxes *ngIf="activeSearchResult" [imageID]="activeSearchResult?.image_id" [collectionID]="collectionID" [filename]="activeSearchResult?.filename" [result]="activeSearchResult"  (clicked)="router.navigate(['/collection/'+collectionID+'/image/'+activeSearchResult?.image_id])"></app-image-boxes>
+      <button class="btn btn-sm" [ngClass]="{'btn-outline-secondary': !isFavorite, 'btn-primary': isFavorite}" (click)="toggleFavorite(item)"><span class="oi oi-star" ></span></button>
+    </div>
+  </div>
+</div>

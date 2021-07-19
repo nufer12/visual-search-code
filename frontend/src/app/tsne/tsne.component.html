@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="btn-toolbar" role="toolbar" aria-label="Control toolbar">
+    <div class="btn-group mr-2" role="group" aria-label="View Control">
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="showPatches = !showPatches;draw()">{{showPatches ? 'Show Full Images' : 'Show Patches'}}</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="maxextension = maxextension + 10;draw()"><span class="oi oi-zoom-in"></span></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="maxextension = maxextension - 10;draw()"><span class="oi oi-zoom-out"></span></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="resetView()"><span class="oi oi-resize-both"></span></button>
+    </div>
+    <div class="btn-group mr-2" role="group" aria-label="Second group">
+      <button class="btn btn-sm btn-outline-primary" (click)="refineSearch()" type="button">
+          Refine Search Results <span class="oi oi-check" ></span><span style="width: 5px; display: inline-block;"></span><span class="oi oi-x" ></span>
+      </button>
+    </div>
+    <div class="btn-group mr-2" role="group" aria-label="Third group">
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="saveImage()"><span class="oi oi-cloud-download"></span></button>
+    </div>
+  </div>  
+  <br/>
+  <div class="row">
+    <div #canvasContainer id="tsneCanvasContainer" class="col-10" (window:resize)="draw()">
+        <canvas id="tsne-canvas" width="800" height="400"></canvas>
+    </div>
+    <div class="col-2">
+      <h5>Search Details</h5>
+      <app-image-boxes *ngIf="queryAsResult" [imageID]="queryAsResult?.image_id" [collectionID]="collectionID" [filename]="queryAsResult?.filename" [result]="queryAsResult"  (clicked)="router.navigate(['/collection/'+collectionID+'/search/'+searchID])"></app-image-boxes>
+      
+      <br/>
+      <br/>
+      <br/>
+      <h5 *ngIf="_activeResult">Selected Result</h5>
+      <app-results-item *ngIf="_activeResult" [item]="_activeResult"></app-results-item>
+    </div>
+  </div>
+</div>

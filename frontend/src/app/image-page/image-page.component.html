@@ -1,0 +1,143 @@
+<div class="container main-container">
+    <div class="row">
+      <div class="col-md-8 image-container mode-{{mode}}">
+        <app-image-box-draw #drawCanvas [src]="api.baseURL + '/img/' + collectionID + '/full/' + imageData?.filename + '?token='+api.token" (boxesUpdated)="searchBBoxes = $event"></app-image-box-draw>
+      </div>
+      <div class="col-md-4">
+        <div id="image-accordion">
+          <div class="card">
+            <div class="card-header" id="meta-information-heading">
+              <h5 class="mb-0">
+                <button (click)="mode = 0" class="btn btn-link" data-toggle="collapse" data-target="#meta-information" aria-expanded="true" aria-controls="meta-information">Information</button>
+              </h5>
+            </div>
+  
+            <div #metaInformation id="meta-information" class="collapse" aria-labelledby="meta-information-heading" data-parent="#image-accordion">
+              <div class="card-body">
+                <form>
+                  <div *ngIf="imageData" class="form-group">
+                    Uploaded on {{imageData?.upload_date}} by {{imageData?.upload_username}}<br/>
+                    <br>
+                    <div *ngFor="let attr of imageAttributes" class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="meta-info-{{attr}}-descr">{{attr | titlecase}}:</span>
+                      </div>
+                      <input type="text" class="form-control" placeholder="{{attr | titlecase}}" attr.aria-label="{{attr}}" attr.aria-describedby="meta-info-{{attr}}-descr" [value]="imageData[attr]" (keyup)="update($event, attr, imageData[attr])" [disabled]="!collectionData?.editable">
+                    </div>
+                  </div>
+                </form>
+                <button *ngIf="imageData?.status != 9" type="button" class="btn btn-danger btn-block disabled-on-loading" (click)="deleteImage()" [disabled]="!collectionData?.editable">Delete</button>
+                <button *ngIf="imageData?.status == 9" type="button" class="btn btn-warning btn-block disabled-on-loading" (click)="recoverImage()" [disabled]="!collectionData?.editable">Recover</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="collectionData?.editable" class="card">
+            <div class="card-header" id="search-heading">
+              <h5 class="mb-0">
+                <button (click)="mode = 1" class="btn btn-link" data-toggle="collapse" data-target="#search" aria-expanded="false" aria-controls="search">Search</button>
+              </h5>
+            </div>
+            <div #searchInformation id="search" class="collapse" aria-labelledby="search-heading" data-parent="#image-accordion">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-6">
+                      <button type="button" class="btn btn-outline-success btn-block" (click)="drawCanvas.addBoxToCanvas({width: 100, height: 100, top: 20, left: 20})"><span class="oi oi-plus"></span></button>
+                  </div>
+                  <div class="col-6">
+                      <button type="button" class="btn btn-outline-danger btn-block" (click)="drawCanvas.removeActiveObjects()"><span class="oi oi-minus"></span></button>
+                  </div>
+                  <div style="margin-top: 10px;" class="col-12">
+                      <button class="btn btn-success btn-block disabled-on-loading" (click)="startSearch()" [disabled]="chosenIndexID == 0 || searchBBoxes.length < 1">Search</button>
+                  </div>
+                </div>
+                <h5>Filter</h5>
+                <select #indexSelection [(ngModel)]="chosenIndexID">
+                  <option *ngFor="let index of indexData" [disabled]="index.status != IndexStatus.FINISHED" [value]="index.id" [selected]="index.id == latestAvailableIndex">{{index.name}}
+                    <span *ngIf="index.status <= IndexStatus.RUNNING"> (Not ready)</span>
+                    <span *ngIf="index.status >= IndexStatus.STOPPED_WITH_ERRORS && index.status <= IndexStatus.STOPPED_ON_REQUEST"> (Stopped)</span>
+                    <span *ngIf="index.status == IndexStatus.DELETED"> (Deleted)</span>
+                  </option>
+                </select>
+                <div *ngIf="!usesLatestImages" class="alert alert-danger">
+                  This filter does not use the current set of images!
+                </div>
+                <button style="margin-left: 10px;" type="button" class="btn btn-inline btn-sm btn-outline-primary" data-toggle="modal" data-target="#indexMoreInfoModal"><span class="oi oi-info"></span></button>
+                <h5>Name</h5>
+                <div class="form-group">
+                  <input class="form-control" type="text" name="name" value="" placeholder="Name (min. 4 characters)" [(ngModel)]="searchName">
+                </div>
+                <h5>Combination</h5>
+                <div class="searchCombination-controller">
+                  <div class="form-check checked">
+                    <input class="form-check-input" type="radio" name="search-combination" id="search-combination-and" value="AND" [(ngModel)]="combine" [checked]="combine == 'AND'">
+                    <label class="form-check-label" for="search-combination-and">
+                      Logical AND
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search-combination" id="search-combination-or" value="OR" [(ngModel)]="combine" [checked]="combine == 'OR'">
+                    <label class="form-check-label" for="search-combination-or">
+                      Logical OR
+                    </label>
+                  </div>
+                  <div class="form-check checked">
+                    <input class="form-check-input" type="radio" name="search-combination" id="search-combination-geometry" value="GEOM" [(ngModel)]="combine" [checked]="combine == 'GEOM'">
+                    <label class="form-check-label" for="search-combination-geometry">
+                      Geometry
+                    </label>
+                  </div>
+                  <div *ngIf="combine == 'GEOM'">
+                    <div class="form-group">
+                      <label for="search-weight-feature">Feature: {{weight_feature}}</label>
+                      <input type="range" class="form-control-range" id="search-weight-feature" min="0" max="1" [(ngModel)]="weight_feature" step="0.05">
+                    </div>
+                    <div class="form-group">
+                      <label for="search-weight-angle">Angle: {{weight_angle}}</label>
+                      <input type="range" class="form-control-range" id="search-weight-angle" min="0" max="1" [(ngModel)]="weight_angle" step="0.05">
+                    </div>
+                    <div class="form-group">
+                      <label for="search-weight-angle">Distance: {{weight_distance}}</label>
+                      <input type="range" class="form-control-range" id="search-weight-distance" min="0" max="1" [(ngModel)]="weight_distance" step="0.05">
+                    </div>
+                  </div>
+                </div>
+                <h5>Worker</h5>
+                <div class="form-group">
+                  <label for="newSearchMachine">Worker</label>
+                  <select id="newSearchMachine" name="new-search-machine" class="form-control" [(ngModel)]="searchMachine">
+                    <option value="-1">Automatically</option>
+                    <option *ngFor="let worker of workers" value="{{worker.id}}">{{worker.description}} ({{worker.id}})</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div [ngClass]="{'hidden': currentSearchAsResult == null}" class="card">
+            <div class="card-header" id="meta-result-heading">
+              <h5 class="mb-0">
+                <button (click)="mode = 0" class="btn btn-link" data-toggle="collapse" data-target="#meta-result" aria-expanded="false" aria-controls="meta-result">Result</button>
+              </h5>
+            </div>
+  
+            <div #metaResult id="meta-result" class="collapse" aria-labelledby="meta-result-heading" data-parent="#image-accordion">
+              <div *ngIf="currentSearchAsResult" class="card-body">
+                  <p *ngIf="currentSearchAsResult.total_hits == 0">Waiting for retrievals...</p>
+                  <app-search-item *ngIf="currentSearchAsResult.total_hits > 0" [item]="currentSearchAsResult"></app-search-item>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 100px;" class="row">
+      <div class="col-md-12">
+        <h2>Other users also searched for... <small style="font-size: smaller"><a routerLink="/collection/{{collectionID}}/image/{{imageID}}/searches">View All</a></small></h2>
+        <app-generic-list [getParamsKey]="'page_searches'" [itemType]="'search'" [apiArrayKey]="'imageSearches'" [apiID]="imageID" [itemClass]="'col-md-2'" (newData)="paginationSettingsSearches = $event" [perPage]="3"></app-generic-list>
+      </div>
+      <div class="col-md-12">
+        <h2>Searches the image occured in... <small style="font-size: smaller"><a routerLink="/collection/{{collectionID}}/image/{{imageID}}/results">View All</a></small></h2>
+        <app-generic-list [getParamsKey]="'page_retr'" [itemType]="'search'" [apiArrayKey]="'imageRetrievals'" [apiID]="imageID" [itemClass]="'col-md-2'" (newData)="paginationSettingsRetrievals = $event" [perPage]="3"></app-generic-list>
+      </div>
+    </div>
+  </div>
+  <app-index-info-modal [indexID]="chosenIndexID"></app-index-info-modal>

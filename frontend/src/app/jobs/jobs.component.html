@@ -1,0 +1,140 @@
+<div class="container">
+  <h1>Jobs<span style="font-size: smaller; margin-left: 20px"><button type="button" class="btn btn-outline-primary" (click)="refreshData()">Refresh</button></span></h1>
+  
+  <div id="job-accordion" class="accordion">
+      <div class="card">
+        <div class="card-header" id="heading-pending">
+          <h5 class="mb-0">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#accordion-pending" aria-expanded="true" aria-controls="accordion-pending">
+              Pending
+            </button>
+          </h5>
+        </div>
+    
+        <div id="accordion-pending" class="collapse show" aria-labelledby="heading-pending" data-parent="#job-accordion">
+          <div class="card-body">
+              <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Type</th>
+                      <th scope="col">Creator</th>
+                      <th scope="col">Registered</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let job of jobs.pending">
+                      <th scope="row"><a *ngIf="job.type == 0" routerLink="/collection/{{job.collection_id}}/indices">{{job.id}}</a>
+                        <a *ngIf="job.type == 1" routerLink="/collection/{{job.collection_id}}/search/{{job.id}}">{{job.id}}</a></th>
+                      <th>{{job.type == 0 ? 'Visual Filter' : 'Search'}}</th>
+                      <th>{{job.username}}</th>
+                      <th>{{job.creation_date | date:'short'}}</th>
+                      <th><a class="btn btn-outline-primary" (click)="cancel(job.id, job.type)">Delete</a></th>
+                    </tr>
+                  </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+          <div class="card-header" id="heading-running">
+            <h5 class="mb-0">
+              <button class="btn btn-link" data-toggle="collapse" data-target="#accordion-running" aria-expanded="true" aria-controls="accordion-running">
+                Running
+              </button>
+            </h5>
+          </div>
+      
+          <div id="accordion-running" class="collapse" aria-labelledby="heading-running" data-parent="#job-accordion">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Creator</th>
+                        <th scope="col">Started</th>
+                        <th scope="col">Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let job of jobs.running">
+                        <th scope="row"><a *ngIf="job.type == 0" routerLink="/collection/{{job.collection_id}}/indices">{{job.id}}</a>
+                          <a *ngIf="job.type == 1" routerLink="/collection/{{job.collection_id}}/search/{{job.id}}">{{job.id}}</a></th>
+                        <th>{{job.type == 0 ? 'Visual Filter' : 'Search'}}</th>
+                        <th>{{job.username}}</th>
+                        <th>{{job.start_time | date:'short'}}</th>
+                        <th><a class="btn btn-outline-primary" (click)="cancel(job.id, job.type)">Delete</a></th>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="heading-finished">
+              <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#accordion-finished" aria-expanded="true" aria-controls="accordion-finished">
+                  Finished
+                </button>
+              </h5>
+            </div>
+        
+            <div id="accordion-finished" class="collapse" aria-labelledby="heading-finished" data-parent="#job-accordion">
+              <div class="card-body">
+                  <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">ID</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Creator</th>
+                          <th scope="col">Started</th>
+                          <th scope="col">Finished</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Exitcode</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let job of jobs.finished">
+                          <th scope="row"><a *ngIf="job.type == 0" routerLink="/collection/{{job.collection_id}}/indices">{{job.id}}</a>
+                            <a *ngIf="job.type == 1" routerLink="/collection/{{job.collection_id}}/search/{{job.id}}">{{job.id}}</a></th>
+                          <th>{{job.type == 0 ? 'Visual Filter' : 'Search'}}</th>
+                          <th>{{job.username}}</th>
+                          <th>{{job.start_time | date:'short'}}</th>
+                          <th>{{job.end_time | date:'short'}}</th>
+                          <th><span *ngIf="job.status == 3">With Errors</span><span *ngIf="job.status == 4">On User Request</span><span *ngIf="job.status == 5">No errors</span></th>
+                          <th>{{job.exitcode}}</th>
+                        </tr>
+                      </tbody>
+                  </table>
+              </div>
+            </div>
+          </div>
+    </div>
+
+  <h1>Current Workers</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Type</th>
+        <th scope="col">Last Update</th>
+        <th scope="col">Current Job</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let worker of workers">
+        <th scope="row">{{worker.id}}</th>
+        <th>{{worker.description}}</th>
+        <th>{{worker.type == 0 ? 'Visual Filter' : 'Search'}}</th>
+        <th>{{worker.last_update * 1000 | date:'short'}}: 
+          <span *ngIf="worker.status == 10">Nothing to do</span>
+          <span *ngIf="worker.status == 21">Running</span>
+        </th>
+        <th>{{worker.status == 21 ? worker.current_job : ''}}</th>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,8 @@
+<div class="{{containerClass}}">
+  <p *ngIf="data?.length == 0">
+    {{defaultMessage}}
+  </p>
+  <div *ngFor="let item of data" class="{{_bootstrapClass}}">
+    <app-generic-list-item [type]="itemType" [item]="item"></app-generic-list-item>
+  </div>
+</div>

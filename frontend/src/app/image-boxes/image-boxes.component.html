@@ -1,0 +1,8 @@
+<div #outerContainer [id]="'pic-result-'+result?.id" class="pic-result-container" (window:resize)="drawResult()">
+  <div class="pic-result-wrapper">
+    <img #imgTag [src]="src" class="pic-result-image"/>
+    <div class="canvas-container">
+      <canvas [id]="'pic-result-canv-'+result?.id"></canvas>
+    </div>
+  </div>
+</div>

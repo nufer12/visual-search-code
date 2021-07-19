@@ -1,0 +1,90 @@
+<div *ngIf="userID != null" class="container main-container">
+    <h1 class="page-title">User: {{userData?.name}} <span *ngIf="userData?.status == 9">(blocked)</span></h1>
+  
+    <div #formContainer class="row">
+      <div class="col-lg-6">
+        <h2>Account</h2>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" class="form-control" [readonly]="api.user?.user_priv < 2 && api.user?.id != userID" [value]="userData?.name" placeholder="Username" (change)="addToForm('name', $event.target.value)"/>
+        </div>
+        <div class="form-group">
+          <label *ngIf="userID == api.user?.id" for="password1">Password</label>
+          <input *ngIf="userID == api.user?.id" id="password1" type="password" class="form-control" value="" placeholder="Password" (change)="addToForm('password1', $event.target.value)"/>
+          <input *ngIf="userID == api.user?.id" id="password2" type="password" class="form-control" value="" placeholder="Password" (change)="addToForm('password2', $event.target.value)"/>
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select *ngIf="api.user?.user_priv == 2 || api.user?.id == userID" id="status" class="form-control" [value]="userData?.status" (change)="addToForm('status', $event.target.value)">
+            <option value="0">Active</option>
+            <option value="9">Blocked</option>
+          </select>
+          <input *ngIf="api.user?.user_priv < 2 && api.user?.id != userID" id="status" class="form-control" readonly="true" [value]="userData?.status"/>
+        </div>
+        <div class="form-group">
+          <label for="timeLimit">Time Limit</label>
+          <input id="timeLimit" type="date" class="form-control" [readonly]="api.user?.user_priv < 2 && api.user?.id != userID" [value]="userData?.time_limit" (change)="addToForm('timeLimit', $event.target.value)"/>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <h2>Collections</h2>
+        <h3>Global</h3>
+        <div class="form-group">
+          <select *ngIf="api.user?.user_priv == 2 || api.user?.id == userID" id="collPriv" class="form-control" [value]="userData?.coll_priv" (change)="addToForm('coll_priv', $event.target.value)">
+            <option value="0">None</option>
+            <option value="1" [disabled]="api.user?.coll_priv < 1 || api.user?.coll_priv == 2">Create</option>
+            <option value="2" [disabled]="api.user?.coll_priv < 2">View</option>
+            <option value="3" [disabled]="api.user?.coll_priv < 3">View, Create</option>
+            <option value="4" [disabled]="api.user?.coll_priv < 4">View, Edit, Create</option>
+          </select>
+          <input *ngIf="api.user?.user_priv < 2 && api.user?.id != userID" id="collPriv" class="form-control" readonly="true" [value]="userData?.coll_priv"/>
+        </div>
+        <h3>Specific</h3>
+        <div *ngIf="api.user?.user_priv == 2 || api.user?.id == userID" class="form-group">
+          <!--<div *ngFor="let collection of objectKeys(possibleCollections)">
+            <label for="privCollID{{collection}}">Collection {{collection}} <small><a href="/collection/{{collection}}"><span class="oi oi-external-link"></span></a></small></label>
+            <select *ngIf="api.user?.user_priv == 2 || api.user?.id == userID" id="privCollID{{collection}}" class="form-control" [value]="userData?.collection_details[collection]" (change)="addCollectionDetailToForm(collection, $event.target.value)">
+              <option value="0" selected="true">None</option>
+              <option value="1">Read</option>
+              <option value="2" [disabled]="!possibleCollections[collection]">Write</option>
+            </select>
+            <input *ngIf="api.user?.user_priv < 2 && api.user?.id != userID" id="privCollID{{collection}}" class="form-control" readonly="true" [value]="userData?.collection_details[collection]"/>
+          </div>-->
+          <label for="selectSpecific">Choose Collection</label>
+          <select id="selectSpecific" class="form-control" [(ngModel)]="specificCollectionID">
+            <option value="-1">Choose...</option>
+            <option *ngFor="let collection of objectKeys(possibleCollections)" [value]="collection">{{possibleCollections[collection].name}} ({{collection}})</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="selectSpecificRights">Choose Rights</label>
+          <select id="selectSpecificRights" class="form-control" [value]="userData?.collection_details[specificCollectionID]" (change)="addCollectionDetailToForm(specificCollectionID, $event.target.value)">
+            <option value="0" selected="true">None</option>
+            <option value="1">Read</option>
+            <option value="2" [disabled]="!possibleCollections[specificCollectionID]?.editable">Write</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <h2>User Management</h2>
+        <label for="userPriv">Manage users</label>
+        <select id="userPriv" class="form-control" [value]="userData?.user_priv" (change)="addToForm('user_priv', $event.target.value)">
+          <option value="0">None</option>
+          <option value="1" [disabled]="api.user?.user_priv < 1">View</option>
+          <option value="2" [disabled]="api.user?.user_priv < 2">Edit</option>
+        </select>
+      </div>
+      <div class="col-lg-6">
+        <h2>Job Server Management</h2>
+        <label for="jobServerManagement">Manage job server</label>
+        <select id="jobServerManagement" class="form-control" [value]="userData?.resource_priv" (change)="addToForm('resource_priv', $event.target.value)">
+          <option value="0">None</option>
+          <option value="1" [disabled]="api.user?.resource_priv < 1">View</option>
+          <option value="2" [disabled]="api.user?.resource_priv < 2">Edit</option>
+        </select>
+      </div>
+      <button *ngIf="api.user?.user_priv == 2 || api.user?.id == userID" type="submit" class="disabled-on-loading submit-button btn btn-outline-primary btn-block" (click)="sendForm()">Save</button>
+    </div>
+  
+  </div>
+  

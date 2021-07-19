@@ -1,0 +1,19 @@
+<h2>Information</h2>
+<form (ngSubmit)="updateCollection(collection_title.value, collection_comment.value)">
+  <div class="form-group">
+    <label for="newCollectionTitle">Title</label>
+    <input #collection_title [readonly]="!collectionData?.editable" id="newCollectionTitle" type="text" placeholder="Title" class="form-control" [value]="collectionData?.name"/><br/>
+    <label for="newCollectionComment">Comment</label>
+    <textarea #collection_comment [readonly]="!collectionData?.editable" id="newCollectionComment" type="comment" placeholder="Comment" class="form-control">{{collectionData?.comment}}</textarea>
+    <label for="newCollectionCreator">Creator</label>
+    <input readonly="true" id="newCollectionCreator" type="text" placeholder="Creator" class="form-control" [value]="collectionData?.creator"/><br/>
+    <label for="newCollectionDate">Creator</label>
+    <input readonly="true" id="newCollectionDate" type="text" placeholder="Date" class="form-control" [value]="collectionData?.created"/><br/>
+    <label for="newCollectionTotal">Number of images</label>
+    <input readonly="true" id="newCollectionTotal" type="text" placeholder="Number of images" class="form-control" [value]="collectionData?.total_images"/><br/>
+    
+  </div>
+  <button type="submit" class="btn btn-primary btn-block">Save</button>
+  <button *ngIf="collectionData?.status != 9 && collectionData?.editable" type="button" class="btn btn-danger btn-block disabled-on-loading" (click)="removeCollection()">Delete</button>
+  <button *ngIf="collectionData?.status == 9 && collectionData?.editable" type="button" class="btn btn-warning btn-block disabled-on-loading" (click)="recoverCollection()">Recover</button>
+</form>

@@ -1,0 +1,26 @@
+<div #newUserModal class="modal fade" id="user-create-modal" tabindex="-1" role="dialog" aria-labelledby="user-create-modal-label" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="user-create-modal-label">New User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="newUserName">Name</label>
+            <input #user_name id="newUserName" type="text" placeholder="Name" class="form-control"/><br/>
+            <label for="newUserPassword">Password</label>
+            <input #user_password id="newUserPassword" type="text" placeholder="Password" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary disabled-on-loading" (click)="createUser(user_name.value, user_password.value)">Create</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
