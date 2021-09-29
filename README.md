@@ -54,8 +54,9 @@ Follow the readme in `frontend` to install/configure the frontend
 
 Follow the reamde in `search_backend`
 - install python and packages using requirements.txt
-- adjust api secret in workers.py
-- start initialization and search workers
+- adjust start_init_worker_template.sh and start_search_worker_template.sh
+- start initialization workers 
+- start search workers
 
 ### Hardware
 The frontend and REST API can run on a server without GPU support and 

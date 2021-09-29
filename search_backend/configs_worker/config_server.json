@@ -1,0 +1,172 @@
+{
+    "DATA_ROOT": "",                                         // <--------- adjust
+    "PROJECT_DIR": "",
+    "OUTPUT_DIR_BASE": "adjusted in worker.py",
+    "OUTPUT_DIR": "adjusted in worker.py",
+    "DATA_DIR_BASE": "adjusted in worker.py",
+    "TMP_DIR": "",
+    "RANDSEED": 12,
+    "EXP_NAME": "",
+    "DATASET_NAME": "adjusted in workery.py",
+    "DATASET_QUIDS": [],
+    "TEMP": {
+        "CUDA": 1,
+        "IMG_SIZE": 1024,
+        "BATCHSIZE": 1,
+        "NETWORK": {
+            "PIXELMEAN": [
+                0.485,
+                0.456,
+                0.406
+            ],
+            "PIXELSTD": [
+                0.229,
+                0.224,
+                0.225
+            ],
+            "POOLING": {
+                "TYPE": "precise",
+                "SIZE": 5
+            },
+            "WEIGHTS": "weights/model_stcl_epoch_30.pt"
+        },
+        "NCLUSTER": 3
+    },
+    "TRANS": {
+        "CUDA": 1,
+        "VGG_DIR": "external/LinearStyleTransfer/models",
+        "DECODER_DIR": "external/LinearStyleTransfer/models",
+        "MATRIX_PATH": "external/LinearStyleTransfer/models",
+        "BATCHSIZE": 1,
+        "LOADSIZE": 128,
+        "FINESIZE": 128,
+        "LAYER": "r31",
+        "VERBOSE": false,
+        "STYLE_PATH": "adjusted in worker.py"
+    },
+    "RET": {
+        "CUDA": true,
+        "IMG": {
+            "MINSIZE": 640,
+            "PADDING": 40,
+            "SCALES": [
+                1.0,
+                0.7937005259840997,
+                0.6299605249474365,
+                0.4999999999999999,
+                0.39685026299204973,
+                0.3149802624737182,
+                0.2499999999999999
+            ]
+        },
+        "ROI": {
+            "TYPE": "sw",
+            "PARAMETERS": [
+                12.0,
+                50.0,
+                2.0,
+                1.59,
+                3.0
+            ]
+        },
+        "DISCPROP": {
+            "DECREASE": 200,
+            "MAX": 4000
+        },
+        "NETWORK": {
+            "TYPE": "vgg16bn",
+            "WEIGHTS": "",
+            "PIXELMEAN": [
+                0.485,
+                0.456,
+                0.406
+            ],
+            "PIXELSTD": [
+                0.229,
+                0.224,
+                0.225
+            ],
+            "LAYER": "block4",
+            "POOLING": {
+                "TYPE": "precise",
+                "SIZE": 5
+            }
+        },
+        "PERPOOL_FEATNORM": true,
+        "FEATNORM": true,
+        "PCA_FEATNORM": true,
+        "FEATPOOL1": {
+            "NUM_IMAGE": 500,
+            "NUM_PATCH": 100
+        },
+        "FEATPOOL2": {
+            "NUM_IMAGE": 1000,
+            "NUM_PATCH": 4000
+        },
+        "FEAT_REDUCT": {
+            "TYPE": "pcaw",
+            "DIMENSION": 1152
+        },
+        "FAISS": {
+            "TYPE": "IVFPQL2Dot_96_8_1024_30",
+            "NUM_KNN": 2048,
+            "GPU": true,
+            "PQRECONTYPE": "PQ_96_8"
+        },
+        "INFOVEC": {
+            "BBSSCALE": 100000.0
+        },
+        "PQRECON_INDEX": true,
+        "STYLE_AGGTYPE": "mean",
+        "STYLE_IDS": [
+            1, 2, 3
+        ],
+        "STYLE_FLAG": true,
+        "VOTING": {
+            "FLAG": true,
+            "NUMVOTES": 20,
+            "INTERTHRESH": 0.95,
+            "IOUTHRESH": 0.1,
+            "NUMRELIMAGES": 500
+        },
+        "LQUEXP": {
+            "TYPE": "nn",
+            "NUM": [
+                5
+            ]
+        },
+        "SAVELOAD": {
+            "ROIS_SAVE": true,
+            "ROIS_LOAD": true,
+            "FEATPOOL_SAVE": true,
+            "FEATPOOL_LOAD": true,
+            "FEATRED_SAVE": true,
+            "FEATRED_LOAD": true,
+            "FEATREDPOOL_SAVE": true,
+            "FEATREDPOOL_LOAD": true,
+            "FEATPOOL2_SAVE": true,
+            "FEATPOOL2_LOAD": true,
+            "INDEX_SAVE": true,
+            "INDEX_LOAD": true
+        },
+        "RETRAIN": {
+            "DELTA": 5,
+            "MAX": 5,
+            "AFTERQE": false,
+            "THRESH": 0.5,
+            "VOTING": {
+                "FLAG": true,
+                "NUMVOTES": 20,
+                "INTERTHRESH": 0.95,
+                "IOUTHRESH": 0.1,
+                "NUMRELIMAGES": 500
+            },
+            "LQUEXP": {
+                "TYPE": "nn",
+                "NUM": [
+                    5
+                ]
+            }
+        }
+    }
+}

@@ -12,7 +12,7 @@ def default_loader(path):
 
 
 class DatasetImagelist(data.Dataset):
-    def __init__(self, dataPath, imagelist, loadSize, fineSize, test=False, video=False, grayContent=False):
+    def __init__(self, dataPath, imagelist, loadSize, fineSize, test=False, video=False):
         super(DatasetImagelist, self).__init__()
         self.dataPath = dataPath
         imagelist_from_dataPath = [x for x in os.listdir(dataPath) if is_image_file(x)]
@@ -23,21 +23,15 @@ class DatasetImagelist(data.Dataset):
             self.image_list = sorted(self.image_list)
         if not test:
             self.transform = transforms.Compose([
-            		         transforms.Resize(fineSize),
-            		         transforms.RandomCrop(fineSize),
-                             transforms.RandomHorizontalFlip(),
-            		         transforms.ToTensor()])
+            		            transforms.Resize(fineSize),
+            		            transforms.RandomCrop(fineSize),
+                                    transforms.RandomHorizontalFlip(),
+            		            transforms.ToTensor()])
         else:
-            if grayContent:
-                self.transform = transforms.Compose([
-                                 transforms.Grayscale(num_output_channels=3),
-                		         transforms.Resize(fineSize),
-                		         transforms.ToTensor()])
-            else:
-                self.transform = transforms.Compose([
-                		         transforms.Resize(fineSize),
-                		         transforms.ToTensor()])
-
+            self.transform = transforms.Compose([
+                                    transforms.Grayscale(num_output_channels=3),
+                                    transforms.Resize(fineSize),
+            		            transforms.ToTensor()])
         self.test = test
 
     def __getitem__(self,index):
@@ -47,7 +41,6 @@ class DatasetImagelist(data.Dataset):
         ImgA = self.transform(Img)
 
         imgName = self.image_list[index]
-        #imgName = imgName.split('.')[0]
         imgName = osp.splitext(imgName)[0]
         return ImgA,imgName
 
@@ -55,7 +48,7 @@ class DatasetImagelist(data.Dataset):
         return len(self.image_list)
 
 class Dataset(data.Dataset):
-    def __init__(self, dataPath, loadSize, fineSize, test=False, video=False, grayContent=False):
+    def __init__(self, dataPath, loadSize, fineSize, test=False, video=False):
         super(Dataset,self).__init__()
         self.dataPath = dataPath
         self.image_list = [x for x in os.listdir(dataPath) if is_image_file(x)]
@@ -64,20 +57,14 @@ class Dataset(data.Dataset):
             self.image_list = sorted(self.image_list)
         if not test:
             self.transform = transforms.Compose([
-            		         transforms.Resize(fineSize),
-            		         transforms.RandomCrop(fineSize),
-                             transforms.RandomHorizontalFlip(),
-            		         transforms.ToTensor()])
+                                    transforms.Resize(fineSize),
+                                    transforms.RandomCrop(fineSize),
+                                    transforms.RandomHorizontalFlip(),
+                                    transforms.ToTensor()])
         else:
-            if grayContent:
-                self.transform = transforms.Compose([
-                                 transforms.Grayscale(num_output_channels=3),
-                		         transforms.Resize(fineSize),
-                		         transforms.ToTensor()])
-            else:
-                self.transform = transforms.Compose([
-                		         transforms.Resize(fineSize),
-                		         transforms.ToTensor()])
+            self.transform = transforms.Compose([
+                                    transforms.Resize(fineSize),
+                                    transforms.ToTensor()])
 
         self.test = test
 
@@ -94,3 +81,4 @@ class Dataset(data.Dataset):
 
     def __len__(self):
         return len(self.image_list)
+

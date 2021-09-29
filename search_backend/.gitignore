@@ -1,0 +1,12 @@
+start_search_worker.sh
+start_init_worker.sh
+init_debug.sh
+*.c
+*.so
+__pycache__
+build
+*~
+*.swp
+*.swo
+.*
+!.gitignore
